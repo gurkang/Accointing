@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SymbolPair {
+  id                   Int                    @id @default(autoincrement())
+  symbol               String                 @unique()
+  RecentTradeForSymbol RecentTradeForSymbol[]
+}
+
+model RecentTradeForSymbol {
+  id            Int        @id @default(autoincrement())
+  price         String?
+  qty           String?
+  quoteQty      String?
+  time          String?
+  isBuyerMarket Boolean?
+  isBestMatch   Boolean?
+  symbol        SymbolPair @relation(fields: [symbolId], references: [id])
+  symbolId      Int
+}
